@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip install:*)",
+      "Bash(python -c ':*)",
+      "Bash(rm -f interviewiq.db)",
+      "Bash(rm -rf chroma_db)",
+      "Bash(python -m pytest tests/ -v)",
+      "Bash(python -m pytest tests/ -v --timeout=60)",
+      "Bash(python -m pytest tests/ -v -s)",
+      "Bash(python -c \"import langgraph; print\\(langgraph.__version__\\)\")",
+      "Bash(python -c \"from langgraph.graph import __all__; print\\(__all__\\)\")",
+      "Bash(python -m pytest tests/test_scoring_fallback.py -v -s)",
+      "Bash(pip show:*)"
+    ]
+  }
+}
