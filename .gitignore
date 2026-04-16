@@ -1,6 +1,6 @@
 # Environment
 .env
-
+.claude
 # Database
 *.db
 *.sqlite
