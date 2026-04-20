@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
 
 from app.db.database import create_tables
 
@@ -17,6 +18,34 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
+    # Add HTTPBearer security scheme so Swagger shows a simple token input
+    schema["components"]["securitySchemes"] = {
+        "BearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        }
+    }
+    # Apply to all endpoints
+    for path in schema.get("paths", {}).values():
+        for method in path.values():
+            method["security"] = [{"BearerAuth": []}]
+    app.openapi_schema = schema
+    return schema
+
+
+app.openapi = custom_openapi
 
 from app.api.ingest import router as ingest_router
 from app.api.query import router as query_router
